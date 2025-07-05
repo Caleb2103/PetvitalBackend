@@ -10,6 +10,25 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ['nombres', 'apellidos', 'email', 'contraseña']
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['user_id', 'nombres', 'apellidos', 'email']
+
+
+class UserDataSerializer(serializers.ModelSerializer):
+    fecha_registro = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['user_id', 'nombres', 'apellidos', 'email', 'fecha_registro']
+
+    def get_fecha_registro(self, obj):
+        lima_tz = pytz.timezone('America/Lima')
+        fecha_lima = obj.fecha_registro.astimezone(lima_tz)
+        return fecha_lima.strftime('%d/%m/%Y %H:%M:%S')
+
+
 class MascotaCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mascota
@@ -29,6 +48,17 @@ class CitaCreateSerializer(serializers.ModelSerializer):
 class CitaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cita
+        fields = '__all__'
+        depth = 1
+
+class RevisionCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Revision
+        fields = '__all__'
+
+class RevisionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Revision
         fields = '__all__'
         depth = 1
 

@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'petvital.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'petvitaldb',
-        'USER': 'petvitaldb_user',
-        'PASSWORD': 'hrgRcFcdQWlqVktkmfIKT93wwsNhHRKj',
-        'HOST': 'dpg-d172m3h5pdvs73ft4p5g-a.oregon-postgres.render.com',
+        'NAME': 'petvital_db',
+        'USER': 'petvital_user',
+        'PASSWORD': 'S10LiiyVkkFIDOFbZQqbrRIdsnw0Ta5z',
+       'HOST': 'dpg-d1kon295pdvs73b4o8cg-a.oregon-postgres.render.com',
         'PORT': '5432'
     }
 }
