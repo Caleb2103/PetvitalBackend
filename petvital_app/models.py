@@ -12,6 +12,7 @@ class User(models.Model):
     email = models.CharField(max_length=100)
     contraseña = models.CharField(max_length=20)
     fecha_registro = models.DateTimeField(default=timezone.now)
+    userImage = models.CharField(max_length=200, blank=True, null=True)
 
     @property
     def fecha_registro_lima(self):
@@ -32,6 +33,7 @@ class Mascota(models.Model):
     unidad_tiempo = models.CharField(max_length=100)
     peso = models.DecimalField(max_digits=5, decimal_places=2)
     esterilizado = models.BooleanField(default=False)
+    mascotaImage = models.CharField(max_length=200, blank=True, null=True)
     
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
