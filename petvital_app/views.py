@@ -9,8 +9,7 @@ from .models import *
 from .serializers import *
 from petvital_app.utils.gemini_api import enviar_mensaje
 
-from .serializers import MascotaSerializer  # Asegúrate de importar tu serializer de Mascota
-
+#Login Usuario
 class LoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -32,6 +31,7 @@ class LoginView(APIView):
                         'nombres': user.nombres,
                         'apellidos': user.apellidos,
                         'email': user.email,
+                        'userImage': user.userImage
                     },
                     'pets': mascotas_serializadas
                 }, status=status.HTTP_200_OK)
@@ -40,7 +40,6 @@ class LoginView(APIView):
                 return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 # Register
 class RegisterView(APIView):
@@ -55,7 +54,7 @@ class RegisterView(APIView):
                 'message': 'Usuario registrado exitosamente',
                 'user_id': user.user_id,
                 'nombres': user.nombres,
-                'apellidos': user.apellidos
+                'apellidos': user.apellidos,
             }, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -88,12 +87,14 @@ class HomeDataView(APIView):
         except User.DoesNotExist:
             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
+#Get Usuarios
 class GetAllUsersView(APIView):
     def get(self, request):
         users = User.objects.all()
         serializer = UserDataSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+#Cambiar Contraseña
 class ChangePasswordView(APIView):
     def post(self, request, user_id):
         nueva_contraseña = request.data.get('nueva_contraseña')
@@ -108,11 +109,7 @@ class ChangePasswordView(APIView):
         except User.DoesNotExist:
             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
-from rest_framework import generics, status
-from rest_framework.response import Response
-from .models import User
-from .serializers import UserSerializer
-
+#Update Usuario
 class UserUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -127,10 +124,8 @@ class UserUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
         if serializer.is_valid():
             serializer.save()
-            print(">>> [UPDATE] Usuario actualizado correctamente")
             return Response({"message": "Usuario actualizado exitosamente"}, status=status.HTTP_200_OK)
         else:
-            print(">>> [UPDATE] Errores del serializer:", serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
@@ -138,7 +133,6 @@ class UserUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         print(f">>> [DESTROY] Eliminando usuario ID: {instance.user_id}")
         self.perform_destroy(instance)
         return Response({"message": "Usuario eliminado exitosamente"}, status=status.HTTP_204_NO_CONTENT)
-
 
 # Crear Mascota
 class MascotaCreateView(generics.CreateAPIView):
@@ -284,6 +278,7 @@ class RevisionUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         super().destroy(request, *args, **kwargs)
         return Response({"message": "Revision eliminada exitosamente"}, status=status.HTTP_204_NO_CONTENT)
 
+#Procesar Mensajes IA con Memoria
 class ProcesarMensajeIAView(generics.CreateAPIView):
     serializer_class = MensajeIAInputSerializer
 

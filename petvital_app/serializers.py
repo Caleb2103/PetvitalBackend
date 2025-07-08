@@ -15,7 +15,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['user_id', 'nombres', 'apellidos', 'email']
 
-
 class UserDataSerializer(serializers.ModelSerializer):
     fecha_registro = serializers.SerializerMethodField()
 
@@ -27,7 +26,6 @@ class UserDataSerializer(serializers.ModelSerializer):
         lima_tz = pytz.timezone('America/Lima')
         fecha_lima = obj.fecha_registro.astimezone(lima_tz)
         return fecha_lima.strftime('%d/%m/%Y %H:%M:%S')
-
 
 class MascotaCreateSerializer(serializers.ModelSerializer):
     class Meta:
