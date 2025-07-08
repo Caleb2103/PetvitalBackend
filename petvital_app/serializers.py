@@ -13,7 +13,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id', 'nombres', 'apellidos', 'email']
+        fields = ['user_id', 'nombres', 'apellidos', 'email', 'userImage']
 
 class UserDataSerializer(serializers.ModelSerializer):
     fecha_registro = serializers.SerializerMethodField()
